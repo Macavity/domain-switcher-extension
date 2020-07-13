@@ -1,10 +1,17 @@
 import Vue from 'vue';
-import App from './App';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import store from '../store';
+import DomainSwitcherOptions from './DomainSwitcherOptions';
 
 global.browser = require('webextension-polyfill');
 
-/* eslint-disable no-new */
+Vue.use(ElementUI);
+
+store.dispatch('initFromSettings');
+
 new Vue({
-  el: '#app',
-  render: h => h(App),
+  el: '#options',
+  store,
+  render: h => h(DomainSwitcherOptions),
 });

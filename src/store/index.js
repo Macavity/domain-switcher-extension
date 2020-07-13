@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createLogger from 'vuex/dist/logger';
 
 import * as getters from './getters';
 import mutations from './mutations';
@@ -9,9 +10,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    foo: 'bar',
+    projects: [],
   },
   getters,
   mutations,
   actions,
+  plugins: [createLogger()],
 });
