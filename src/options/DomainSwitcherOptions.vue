@@ -7,46 +7,21 @@
       <el-main>
         <h3>Projects</h3>
 
-        <el-button @click="addProject" type="primary">Add Project</el-button>
-
-        <div class="projects-list">
-          <div v-for="project in projects" class="panel panel-default" ng-class="{'panel-default': project.enabled}">
-            <div class="panel-heading" ng-mouseenter="project.showEdit = true" ng-mouseleave="project.showEdit = false">
-              <span class="panel-title" ng-hide="project.editMode">{{ project.name }}</span>
-
-              <span ng-show="project.editMode">
-                <input type="text" placeholder="New Project Name" ng-model="project.name" ng-blur="doneEditName(project)" />
-              </span>
-
-              <span class="pull-right panel-right-heading">
-                <a href="#" class="panel-heading-link" ng-show="project.showEdit  && !project.editMode" ng-click="editName(project)"
-                  ><span class="glyphicon glyphicon-edit"></span> edit name</a
-                >
-
-                <a href="#" class="panel-heading-link rem-proj" ng-click="removeProject($index)"><span class="glyphicon glyphicon-remove"></span></a>
-              </span>
+        <el-row>
+          <el-col :span="24">
+            <el-button @click="addProject" type="primary">Add Project</el-button>
+            <br />
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="project-list">
+              <el-row v-for="(project, key) in projects" :key="`project${key}`">
+                <ProjectRow :project="project" />
+              </el-row>
             </div>
-            <div class="panel-body">
-              <div class="row">
-                <div ng-repeat="env in project.envs" class="col-sm-4 col-md-3">
-                  <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Eg: localhost:3000" ng-model="env.url" />
-                  </div>
-                </div>
-                <div class="col-sm-4 col-md-3">
-                  <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="addEnv(project)" role="button">
-                      <span class="glyphicon glyphicon-plus-sign"></span> Add env
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- row -->
-            </div>
-            <!-- panel body -->
-          </div>
-          <!-- panel -->
-        </div>
+          </el-col>
+        </el-row>
       </el-main>
 
       <el-footer>
@@ -59,10 +34,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ProjectRow from './ProjectRow';
 
 export default {
   name: 'DomainSwitcherOptions',
-
+  components: { ProjectRow },
   data() {
     return {
       showSaveAlert: false,
@@ -74,7 +50,9 @@ export default {
   },
 
   methods: {
-    addProject() {},
+    addProject() {
+      this.$store.dispatch('addProject');
+    },
 
     save() {
       this.$store.dispatch('saveSettings');
@@ -84,12 +62,27 @@ export default {
         this.showSaveAlert = false;
       }, 5000);
     },
+
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 p {
   font-size: 20px;
+}
+
+.el-row {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>
