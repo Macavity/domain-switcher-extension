@@ -1,6 +1,7 @@
 import * as types from './mutation-types';
 import { ProjectFactory } from '../models/ProjectFactory';
 import { uuidv4 } from '../helpers/uuid';
+import { EnvironmentFactory } from '../models/EnvironmentFactory';
 
 const SETTINGS = 'domain-switcher';
 
@@ -8,6 +9,16 @@ export const addProject = ({ commit }) => {
   const project = ProjectFactory.createEmpty();
 
   commit(types.ADD_PROJECT, project);
+};
+
+export const addEnvironment = ({ commit }, { projectId }) => {
+  const env = EnvironmentFactory.createEmpty(projectId);
+
+  commit(types.ADD_ENVIRONMENT, env);
+};
+
+export const deleteEnvironment = ({ commit }, { projectId, environmentId }) => {
+  commit(types.DELETE_ENVIRONMENT, { projectId, environmentId });
 };
 
 export const updateProject = ({ commit }, projectPayload) => {
@@ -25,6 +36,7 @@ export const initFromSettings = ({ commit }) => {
     const projects = [];
 
     for (const obj of objects) {
+      console.log('- Add Project', obj);
       if (!obj._id) {
         obj._id = uuidv4();
       }

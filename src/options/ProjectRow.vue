@@ -6,18 +6,18 @@
       <el-button icon="edit" style="float: right" size="medium" type="primary" plain @click="edit">Edit</el-button>
     </div>
     <el-table :data="project.environments" empty-text="No Environments added yet.">
-      <el-table-column prop="position" label="#" width="10"> </el-table-column>
-      <el-table-column prop="label" label="Label" width="100"> </el-table-column>
-      <el-table-column prop="url" label="URL" width="200"> </el-table-column>
+      <el-table-column prop="position" label="#" width="50"></el-table-column>
+      <el-table-column prop="label" label="Label" width="300"></el-table-column>
+      <el-table-column prop="url" label="URL" width="auto"></el-table-column>
       <el-table-column label="Operations">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete </el-button>
+          <el-button size="mini" @click="editEnvironment(scope.$index, scope.row)">Edit</el-button>
+          <el-button size="mini" type="danger" @click="deleteEnvironment(scope.$index, scope.row)">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
     <br />
-    <el-button type="success" icon="plus">Add Environment</el-button>
+    <el-button type="success" icon="plus" @click="addEnvironment">Add Environment</el-button>
   </el-card>
 </template>
 
@@ -53,9 +53,16 @@ export default {
       });
     },
 
-    handleEdit(index, row) {},
+    addEnvironment() {
+      this.$store.dispatch('addEnvironment', { projectId: this.project.id });
+    },
 
-    handleDelete(index, row) {},
+    editEnvironment(index, row) {},
+
+    deleteEnvironment(index, row) {
+      console.log('delete', index, row);
+      this.$store.dispatch('deleteEnvironment', { projectId: row.projectId, environmentId: row.id });
+    },
   },
 };
 </script>

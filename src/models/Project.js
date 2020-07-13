@@ -35,4 +35,12 @@ export class Project {
   get environments() {
     return this._environments;
   }
+
+  addEnvironment(env) {
+    this._environments.push(env);
+  }
+
+  removeEnvironmentById(envId) {
+    this._environments = this._environments.filter(item => item.id !== envId);
+  }
 }
