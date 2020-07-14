@@ -1,5 +1,7 @@
 # Domain Switcher (Chrome Extension)
 
+[![Build Status](https://travis-ci.org/Macavity/domain-switcher-extension.svg?branch=master)](https://travis-ci.org/Macavity/domain-switcher-extension)
+
 Inspired by https://github.com/stevehanson/domain-switcher-chrome but decided to do a complete do-over with Vue/Webpack/ESLint.
 
 The extension allows to easily switch between different environments of configured projects.
