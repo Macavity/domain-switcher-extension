@@ -9,11 +9,12 @@ import * as actions from './actions';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    projects: [],
-  },
-  getters,
-  mutations,
-  actions,
-  plugins: [createLogger()],
+    state: {
+        projects: [],
+        isSaving: false,
+    },
+    getters,
+    mutations,
+    actions,
+    plugins: [createLogger()],
 });

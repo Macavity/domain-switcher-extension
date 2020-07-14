@@ -1,45 +1,52 @@
 import * as types from './mutation-types';
 import { ProjectFactory } from '../models/ProjectFactory';
 import { uuidv4 } from '../helpers/uuid';
-
-const SETTINGS = 'domain-switcher';
+import { EnvironmentFactory } from '../models/EnvironmentFactory';
+import { SETTINGS } from '../constants';
 
 export const addProject = ({ commit }) => {
-  const project = ProjectFactory.createEmpty();
+    const project = ProjectFactory.createEmpty();
 
-  commit(types.ADD_PROJECT, project);
+    commit(types.ADD_PROJECT, project);
+};
+
+export const addEnvironment = ({ commit }, { projectId }) => {
+    const env = EnvironmentFactory.createEmpty(projectId);
+
+    commit(types.ADD_ENVIRONMENT, env);
+};
+
+export const deleteEnvironment = ({ commit }, { projectId, environmentId }) => {
+    commit(types.DELETE_ENVIRONMENT, { projectId, environmentId });
+};
+
+export const updateEnvironment = ({ commit }, environment) => {
+    commit(types.UPDATE_ENVIRONMENT, environment);
 };
 
 export const updateProject = ({ commit }, projectPayload) => {
-  commit(types.UPDATE_PROJECT, projectPayload);
+    commit(types.UPDATE_PROJECT, projectPayload);
 };
 
 export const initFromSettings = ({ commit }) => {
-  const settings = window.localStorage[SETTINGS];
-  console.log('settings', settings);
+    const settings = window.localStorage[SETTINGS];
+    console.log('settings', settings);
 
-  if (typeof settings !== 'undefined' && settings !== null) {
-    console.debug('Load existing settings.');
+    if (typeof settings !== 'undefined' && settings !== null) {
+        console.debug('Load existing settings.');
 
-    const objects = JSON.parse(settings);
-    const projects = [];
+        const projects = ProjectFactory.createListFromSettingsString(settings);
 
-    for (const obj of objects) {
-      if (!obj._id) {
-        obj._id = uuidv4();
-      }
-
-      projects.push(ProjectFactory.createFromSettingsObject(obj));
+        commit(types.UPDATE_PROJECTS, projects);
+    } else {
+        commit(types.UPDATE_PROJECTS, []);
     }
-
-    commit(types.UPDATE_PROJECTS, projects);
-  } else {
-    commit(types.UPDATE_PROJECTS, []);
-  }
 };
 
 export const saveSettings = ({ commit, state }) => {
-  localStorage[SETTINGS] = JSON.stringify(state.projects);
-  console.debug(SETTINGS + ' saved.');
-  console.debug(localStorage[SETTINGS]);
+    commit(types.START_SAVING);
+    localStorage[SETTINGS] = JSON.stringify(state.projects);
+    console.debug(SETTINGS + ' saved.');
+    console.debug(localStorage[SETTINGS]);
+    commit(types.SAVING_DONE);
 };
