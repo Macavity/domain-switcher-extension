@@ -16,8 +16,8 @@ export class ProjectFactory {
         const projects = [];
 
         for (const obj of objects) {
-            if (!obj._id) {
-                obj._id = uuidv4();
+            if (!obj.id) {
+                obj.id = uuidv4();
             }
 
             projects.push(ProjectFactory.createFromSettingsObject(obj));
@@ -28,11 +28,15 @@ export class ProjectFactory {
 
     static createFromSettingsObject(object) {
         const environments = [];
-        for (const env of object._environments) {
+
+        for (const env of object.environments) {
             environments.push(EnvironmentFactory.createFromSettingsObject(env));
         }
 
-        return new Project(object._id, object._name, environments);
+        const name = object.name;
+        const id = object.id;
+
+        return new Project(id, name, environments);
     }
 
     static createFromProperties(id, name, environments = []) {

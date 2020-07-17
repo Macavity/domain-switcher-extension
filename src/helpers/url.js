@@ -5,11 +5,15 @@
  * @param tab
  * @return {boolean}
  */
-import { SETTINGS } from '../constants';
+import { PAGE_POPUP, SETTINGS } from '../constants';
 import { ProjectFactory } from '../models/ProjectFactory';
 
 export function checkForRegisteredUrl(tabId, changeInfo, tab) {
-    console.log('checkForRegisteredUrl', tabId, changeInfo, tab);
+    console.debug('checkForRegisteredUrl', tabId, changeInfo, tab);
+
+    if (typeof tab.url === 'undefined') {
+        return false;
+    }
 
     const extensionSettings = localStorage[SETTINGS];
 
@@ -19,15 +23,19 @@ export function checkForRegisteredUrl(tabId, changeInfo, tab) {
 
     const projects = ProjectFactory.createListFromSettingsString(extensionSettings);
 
-    const envs = getEnvsForCurrentUrl(projects, tab.url);
+    const envs = getMatchingEnvironmentForUrl(projects, tab.url);
 
     if (envs) {
+        console.debug('Environment matches => Activate Domain Switcher Popup');
         global.browser.pageAction.show(tabId);
         global.browser.pageAction.setTitle({
             tabId: tab.id,
             title: 'url: ' + tab.url,
         });
-        global.browser.pageAction.setPopup({ tabId: tab.id, popup: 'popup.html' });
+        global.browser.pageAction.setPopup({
+            tabId: tab.id,
+            popup: PAGE_POPUP,
+        });
     }
 }
 
@@ -36,7 +44,7 @@ export function checkForRegisteredUrl(tabId, changeInfo, tab) {
  * @param currentUrl
  * @return {Environment|boolean}
  */
-export function getEnvsForCurrentUrl(projects, currentUrl) {
+export function getMatchingEnvironmentForUrl(projects, currentUrl) {
     const tabURL = new URL(currentUrl);
 
     for (const project of projects) {
@@ -53,7 +61,7 @@ export function getEnvsForCurrentUrl(projects, currentUrl) {
 }
 
 /**
- * @param {string} pattern
+ * @param {string} rawPattern
  * @param {URL} currentUrl
  * @return {boolean}
  */

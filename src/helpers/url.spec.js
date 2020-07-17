@@ -1,5 +1,5 @@
 import { describe, fdescribe, it } from '@jest/globals';
-import { getEnvsForCurrentUrl, urlMatches } from './url';
+import { getMatchingEnvironmentForUrl, urlMatches } from './url';
 import { ProjectFactory } from '../models/ProjectFactory';
 import { Environment } from '../models/Environment';
 
@@ -45,7 +45,7 @@ describe('urlMatches', () => {
     });
 });
 
-describe('getEnvsForCurrentUrl', () => {
+describe('getMatchingEnvironmentForUrl', () => {
     const env1 = new Environment('e1', 'p1', 'domain.test', 'Test');
     const env2 = new Environment('e2', 'p1', 'domain.org', 'Org');
     const projectWithoutEnvs = ProjectFactory.createFromProperties('p0', 'A', []);
@@ -55,37 +55,37 @@ describe('getEnvsForCurrentUrl', () => {
     it('should be false if there are no projects', function() {
         const currentUrl = 'http://domain.test';
 
-        expect(getEnvsForCurrentUrl([], currentUrl)).toBe(false);
+        expect(getMatchingEnvironmentForUrl([], currentUrl)).toBe(false);
     });
 
     it('should be false if the project has no environments', function() {
         const currentUrl = 'http://domain.test';
 
-        expect(getEnvsForCurrentUrl([projectWithoutEnvs], currentUrl)).toBe(false);
+        expect(getMatchingEnvironmentForUrl([projectWithoutEnvs], currentUrl)).toBe(false);
     });
 
     it('should return the matching environment if the url matches', function() {
         const currentUrl = 'http://domain.test';
 
-        expect(getEnvsForCurrentUrl([projectWith1Env], currentUrl)).toBeInstanceOf(Environment);
-        expect(getEnvsForCurrentUrl([projectWith1Env], currentUrl).id).toBe('e1');
+        expect(getMatchingEnvironmentForUrl([projectWith1Env], currentUrl)).toBeInstanceOf(Environment);
+        expect(getMatchingEnvironmentForUrl([projectWith1Env], currentUrl).id).toBe('e1');
     });
 
     it('should return the the matching environment in case a project has more than one environment', function() {
         const currentUrl = 'http://domain.org';
 
-        expect(getEnvsForCurrentUrl([projectWith2Envs], currentUrl).id).toBe('e2');
+        expect(getMatchingEnvironmentForUrl([projectWith2Envs], currentUrl).id).toBe('e2');
     });
 
     it('should return false if the url does not match', function() {
         const currentUrl = 'http://not-here.test';
 
-        expect(getEnvsForCurrentUrl([projectWith1Env, projectWith2Envs], currentUrl)).toBe(false);
+        expect(getMatchingEnvironmentForUrl([projectWith1Env, projectWith2Envs], currentUrl)).toBe(false);
     });
 
     it('should return the first result if more than one would match', function() {
         const currentUrl = 'http://domain.test';
 
-        expect(getEnvsForCurrentUrl([projectWith1Env, projectWith2Envs], currentUrl).id).toBe('e1');
+        expect(getMatchingEnvironmentForUrl([projectWith1Env, projectWith2Envs], currentUrl).id).toBe('e1');
     });
 });

@@ -2,51 +2,33 @@ export class Environment {
     /**
      * @var string
      */
-    _id;
+    id;
 
     /**
      * @var string
      */
-    _projectId;
+    projectId;
+
+    /**
+     * @type {string}
+     */
+    protocol = 'https';
 
     /**
      * @var string|null
      */
-    _label = '';
+    label = '';
 
     /**
      * @var string|null
      */
-    _pattern;
+    pattern = '';
 
-    constructor(id, projectId, pattern = '', label = '') {
-        this._id = id;
-        this._projectId = projectId;
-        this._pattern = pattern;
-        this._label = label;
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    get label() {
-        return this._label;
-    }
-
-    set label(value) {
-        this._label = value;
-    }
-
-    get projectId() {
-        return this._projectId;
-    }
-
-    get pattern() {
-        return this._pattern;
-    }
-
-    set pattern(value) {
-        this._pattern = value;
+    constructor(id, projectId, protocol = 'https', pattern = '', label = '') {
+        this.id = id;
+        this.projectId = projectId;
+        this.protocol = protocol;
+        this.pattern = pattern;
+        this.label = label;
     }
 }

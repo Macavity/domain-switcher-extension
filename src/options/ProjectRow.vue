@@ -18,7 +18,12 @@
             </el-table-column>
             <el-table-column prop="pattern" label="URL" width="auto">
                 <template slot-scope="scope">
-                    <el-input placeholder="localhost" v-model="scope.row.pattern" @keyup="updateEnv(scope.row)"></el-input>
+                    <el-input placeholder="localhost" v-model="scope.row.pattern" @keyup="updateEnv(scope.row)" class="input-with-select">
+                        <el-select v-model="scope.row.protocol" slot="prepend" placeholder="Select" default-first-option>
+                            <el-option label="https" value="https://"></el-option>
+                            <el-option label="http" value="http://"></el-option>
+                        </el-select>
+                    </el-input>
                 </template>
             </el-table-column>
             <el-table-column label="Operations">
@@ -94,6 +99,10 @@ export default {
     .el-button {
         margin-top: -8px;
     }
+}
+
+.el-select .el-input {
+    width: 92px;
 }
 
 .project {

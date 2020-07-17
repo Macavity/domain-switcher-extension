@@ -1,46 +1,30 @@
 export class Project {
-  /**
-   * @var string|null
-   */
-  _id;
+    /**
+     * @var string|null
+     */
+    id;
 
-  /**
-   * @var string
-   */
-  _name;
+    /**
+     * @var string
+     */
+    name;
 
-  /**
-   * @var Environment[]
-   */
-  _environments;
+    /**
+     * @var Environment[]
+     */
+    environments;
 
-  constructor(id, name, environments = []) {
-    this._id = id;
-    this._name = name;
-    this._environments = environments;
-  }
+    constructor(id, name, environments = []) {
+        this.id = id;
+        this.name = name;
+        this.environments = environments;
+    }
 
-  get id() {
-    return this._id;
-  }
+    addEnvironment(env) {
+        this.environments.push(env);
+    }
 
-  get name() {
-    return this._name;
-  }
-
-  set name(name) {
-    this._name = name;
-  }
-
-  get environments() {
-    return this._environments;
-  }
-
-  addEnvironment(env) {
-    this._environments.push(env);
-  }
-
-  removeEnvironmentById(envId) {
-    this._environments = this._environments.filter(item => item.id !== envId);
-  }
+    removeEnvironmentById(envId) {
+        this.environments = this.environments.filter(item => item.id !== envId);
+    }
 }

@@ -1,9 +1,15 @@
 import store from './store';
 import { checkForRegisteredUrl } from './helpers/url';
-//import { Window as chrome } from 'web-ext-types';
+import { onBackgroundMessage } from './helpers/browser';
 
 global.browser = require('webextension-polyfill');
 
 store.dispatch('initFromSettings');
 
 global.browser.tabs.onUpdated.addListener(checkForRegisteredUrl);
+
+global.browser.runtime.onMessage.addListener(onBackgroundMessage);
+
+// TODO Figure out to cache the project list in the store and use it from there
+// Problem: How can updates be injected.
+// global.browser.storage.onChanged.addListener((changes, storageName) => {})
