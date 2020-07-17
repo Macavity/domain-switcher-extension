@@ -7,10 +7,16 @@ export class EnvironmentFactory {
     }
 
     static createFromSettingsObject(object) {
-        return new Environment(object._id, object._projectId, object._pattern, object._label);
+        const protocol = object.protocol || 'https://';
+        const id = object.id || uuidv4();
+        const projectId = object.projectId;
+        const pattern = object.pattern;
+        const label = object.label;
+
+        return new Environment(id, projectId, protocol, pattern, label);
     }
 
     static clone(env) {
-        return new Environment(env.id, env.projectId, env.pattern, env.label);
+        return new Environment(env.id, env.projectId, env.protocol, env.pattern, env.label);
     }
 }

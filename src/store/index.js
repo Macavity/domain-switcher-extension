@@ -8,6 +8,12 @@ import * as actions from './actions';
 
 Vue.use(Vuex);
 
+const plugins = [];
+
+if (process.env.NODE_ENV !== 'production') {
+    plugins.push(createLogger());
+}
+
 export default new Vuex.Store({
     state: {
         projects: [],
@@ -16,5 +22,5 @@ export default new Vuex.Store({
     getters,
     mutations,
     actions,
-    plugins: [createLogger()],
+    plugins,
 });
