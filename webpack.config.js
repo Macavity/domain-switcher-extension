@@ -96,14 +96,36 @@ const config = {
     ],
 };
 
+function getBuildStamp() {
+    const now = new Date();
+    const year = now.getFullYear() % 100;
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    // Count 2-minute intervals elapsed since midnight:(HH * 60 + MM) / 2
+    const counter = (now.getHours() * 60 + now.getMinutes()) / 2;
+    // Format the stamp as YYMMDDCCC
+    return String(year) + String(month) + String(day) + '-' + String(counter);
+}
+
 if (config.mode === 'production') {
     config.plugins = (config.plugins || []).concat([
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"',
+                BUILD_VERSION: '"' + getBuildStamp() + '"',
             },
         }),
     ]);
+}
+if (config.mode !== 'production') {
+    config.plugins.push(
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"development"',
+                BUILD_VERSION: '"' + getBuildStamp() + '"',
+            },
+        }),
+    );
 }
 
 if (process.env.HMR === 'true') {

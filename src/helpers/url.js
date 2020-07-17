@@ -9,7 +9,7 @@ import { PAGE_POPUP, SETTINGS } from '../constants';
 import { ProjectFactory } from '../models/ProjectFactory';
 
 export function checkForRegisteredUrl(tabId, changeInfo, tab) {
-    console.debug('checkForRegisteredUrl', tabId, changeInfo, tab);
+    // console.debug('checkForRegisteredUrl', tabId, changeInfo, tab);
 
     if (typeof tab.url === 'undefined') {
         return false;
@@ -99,4 +99,20 @@ export function addProtocol(url) {
     } else {
         return url;
     }
+}
+
+/**
+ * @param {string} urlString
+ * @param {Environment} targetEnv
+ * @return {string}
+ */
+export function getNewUrl(urlString, targetEnv) {
+    const targetEnvUrl = targetEnv.protocol + '://' + targetEnv.pattern;
+    const targetUrl = new URL(targetEnvUrl);
+    const currentUrl = new URL(urlString);
+
+    targetUrl.pathname = currentUrl.pathname;
+    targetUrl.search = currentUrl.search;
+
+    return targetUrl.toString();
 }

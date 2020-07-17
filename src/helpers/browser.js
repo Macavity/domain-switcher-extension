@@ -1,5 +1,5 @@
 import { PAGE_OPTIONS } from '../constants';
-import { addProtocol } from './url';
+import { addProtocol, getNewUrl } from './url';
 import { EnvironmentFactory } from '../models/EnvironmentFactory';
 
 global.browser = require('webextension-polyfill');
@@ -11,12 +11,14 @@ export async function queryCurrentTabURL() {
 }
 
 export function getExtensionPageURL(page) {
-    global.browser.extension.getURL(page);
+    return global.browser.extension.getURL(page);
 }
 
 export function goToOptionsPage() {
+    const optionsPage = getExtensionPageURL(PAGE_OPTIONS);
+
     global.browser.tabs.create({
-        url: getExtensionPageURL(PAGE_OPTIONS),
+        url: optionsPage,
     });
 }
 
@@ -52,59 +54,36 @@ export function onBackgroundMessage(messageEvent) {
 }
 
 /**
- *
- * @param {URL} currentUrl
- * @param {Environment} targetEnv
+ * @param {string} urlString
+ * @param {object} targetEnv
  * @param {boolean} openInNewTab
  */
-export function switchDomain(currentUrl, targetEnv, openInNewTab) {
-    console.log('browser.switchDomain', currentUrl, targetEnv);
+export function switchDomain(urlString, targetEnv, openInNewTab) {
+    console.group('switchDomain');
+    console.log('browser.switchDomain');
+    console.log(urlString);
+    console.log(targetEnv);
 
-    if (typeof targetEnv.id === 'undefined') {
-        targetEnv = EnvironmentFactory.createFromSettingsObject(targetEnv);
-    }
+    targetEnv = EnvironmentFactory.createFromSettingsObject(targetEnv);
 
     global.browser.tabs.query({ active: true, lastFocusedWindow: true }).then(tabs => {
         const currentTab = tabs[0];
         console.log('currentTab', currentTab);
+        console.log('currentUrl', urlString);
         console.log('targetEnv', targetEnv);
 
-        const targetEnvUrl = addProtocol(targetEnv.pattern);
-        console.log('targetEnvUrl', targetEnvUrl);
-        const targetUrl = new URL(addProtocol(targetEnvUrl));
-
-        targetUrl.port = currentUrl.port;
-
-        console.log('new', targetUrl);
-
-        // // update current URL to use host, domain, port, start of path of the selected environment.
-        // var uri = new Uri(tabs[0].url);
-        // var requestUrl = addHttpIfNoProtocol(request.url);
-        // var newUri = new Uri(requestUrl);
-        // var currUriEntry = getCurrentUrlEntry(tabs[0].url);
-        //
-        // // update uri to use host, port, protocol of selected ENV
-        // uri.host(newUri.host());
-        // uri.port(newUri.port());
-        // uri.protocol(newUri.protocol());
-        //
-        //
-        // // update uri to use start of path of selected ENV - if path in ENV url
-        // var currentPath = uri.path();
-        // if(currUriEntry.path() !== '') {
-        //     currentPath = uri.path().replace(currUriEntry.path(), '');
-        // }
-        // uri.path(newUri.path() + currentPath);
-        // console.log('updating to', uri.toString(), tabs);
+        const newUrl = getNewUrl(urlString, targetEnv);
 
         if (openInNewTab) {
             global.browser.tabs.create({
-                url: targetUrl,
+                url: newUrl,
             });
         } else {
             global.browser.tabs.update(currentTab.id, {
-                url: targetUrl,
+                url: newUrl,
             });
         }
+
+        console.groupEnd();
     });
 }

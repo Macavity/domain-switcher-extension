@@ -6,6 +6,10 @@ global.browser = require('webextension-polyfill');
 
 store.dispatch('initFromSettings');
 
+if (typeof process.env.BUILD_VERSION !== 'undefined') {
+    console.log('Version ' + process.env.BUILD_VERSION);
+}
+
 global.browser.tabs.onUpdated.addListener(checkForRegisteredUrl);
 
 global.browser.runtime.onMessage.addListener(onBackgroundMessage);

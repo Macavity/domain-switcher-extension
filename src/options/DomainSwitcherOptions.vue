@@ -26,7 +26,6 @@
 
             <el-footer>
                 <el-button type="primary" @click="save" :loading="isSaving">Save settings</el-button>
-                <el-alert v-if="showSaveAlert" type="success" title="Successfully saved." show-icon></el-alert>
             </el-footer>
         </el-container>
     </div>
@@ -45,6 +44,12 @@ export default {
         };
     },
 
+    mounted() {
+        if (typeof process.env.BUILD_VERSION !== 'undefined') {
+            console.log('Options - Version ' + process.env.BUILD_VERSION);
+        }
+    },
+
     computed: {
         ...mapGetters(['projects', 'isSaving']),
     },
@@ -55,12 +60,9 @@ export default {
         },
 
         save() {
-            this.$store.dispatch('saveSettings');
-            this.showSaveAlert = true;
-
-            setTimeout(() => {
-                this.showSaveAlert = false;
-            }, 5000);
+            this.$store.dispatch('saveSettings').then(() => {
+                this.$message.success('Successfully saved.');
+            });
         },
 
         handleEdit(index, row) {

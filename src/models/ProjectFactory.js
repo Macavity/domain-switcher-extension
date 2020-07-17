@@ -26,15 +26,16 @@ export class ProjectFactory {
         return projects;
     }
 
-    static createFromSettingsObject(object) {
+    static createFromSettingsObject(projectObject) {
         const environments = [];
 
-        for (const env of object.environments) {
+        for (const env of projectObject.environments) {
+            env.projectId = projectObject.id;
             environments.push(EnvironmentFactory.createFromSettingsObject(env));
         }
 
-        const name = object.name;
-        const id = object.id;
+        const name = projectObject.name;
+        const id = projectObject.id;
 
         return new Project(id, name, environments);
     }

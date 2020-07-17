@@ -35,6 +35,10 @@ export default {
     mounted() {
         console.log('Popup.mounted', this.currentTabURL, this.projects);
         this.updateEnvironments();
+
+        if (typeof process.env.BUILD_VERSION !== 'undefined') {
+            console.log('Popup - Version ' + process.env.BUILD_VERSION);
+        }
     },
 
     data() {
@@ -71,19 +75,24 @@ export default {
         },
 
         updateEnvironments() {
+            console.group('updateEnvironments');
             if (!this.projects || !this.currentTabURL) {
-                console.debug('Update Environments skipped', this.projects, this.currentTabURL);
+                console.debug('-> skipped', this.projects, this.currentTabURL);
                 return;
             }
 
             const environment = getMatchingEnvironmentForUrl(this.projects, this.currentTabURL);
+            console.debug('getMatchingEnvironmentForUrl', environment);
             this.activeEnvId = environment.id;
 
             const filteredProjects = this.$store.getters.projectById(environment.projectId);
             const project = filteredProjects[0] || null;
+            console.debug('filteredProjects: ', filteredProjects);
+            console.debug('=> project: ', project);
 
             this.environments = project.environments;
             console.debug('Updated Environments', this.environments);
+            console.groupEnd();
         },
 
         selectEnv(env) {
@@ -101,6 +110,10 @@ export default {
 
 <style lang="scss">
 .popup {
+    .el-row {
+        margin-bottom: 10px;
+    }
+
     .el-menu {
         border: 0;
     }

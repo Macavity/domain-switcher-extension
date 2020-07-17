@@ -1,5 +1,5 @@
-import { describe, fdescribe, it } from '@jest/globals';
-import { getMatchingEnvironmentForUrl, urlMatches } from './url';
+import { beforeEach, describe, expect, it } from '@jest/globals';
+import { getMatchingEnvironmentForUrl, getNewUrl, urlMatches } from './url';
 import { ProjectFactory } from '../models/ProjectFactory';
 import { Environment } from '../models/Environment';
 
@@ -46,8 +46,8 @@ describe('urlMatches', () => {
 });
 
 describe('getMatchingEnvironmentForUrl', () => {
-    const env1 = new Environment('e1', 'p1', 'domain.test', 'Test');
-    const env2 = new Environment('e2', 'p1', 'domain.org', 'Org');
+    const env1 = new Environment('e1', 'p1', 'http', 'domain.test', 'Test');
+    const env2 = new Environment('e2', 'p1', 'http', 'domain.org', 'Org');
     const projectWithoutEnvs = ProjectFactory.createFromProperties('p0', 'A', []);
     const projectWith1Env = ProjectFactory.createFromProperties('p1', 'A', [env1]);
     const projectWith2Envs = ProjectFactory.createFromProperties('p1', 'A', [env1, env2]);
@@ -87,5 +87,67 @@ describe('getMatchingEnvironmentForUrl', () => {
         const currentUrl = 'http://domain.test';
 
         expect(getMatchingEnvironmentForUrl([projectWith1Env, projectWith2Envs], currentUrl).id).toBe('e1');
+    });
+});
+
+describe('getNewUrl', () => {
+    let currentUrl;
+
+    beforeEach(() => {
+        currentUrl = 'http://domain.test';
+    });
+
+    it('should return the new url', function() {
+        let targetEnv = new Environment('e', 'p', 'http', 'domain.org');
+
+        let newUrl = getNewUrl(currentUrl, targetEnv);
+        expect(newUrl).toBe('http://domain.org/');
+    });
+
+    it('should return the new url with different protocol', function() {
+        let targetEnv = new Environment('e', 'p', 'https', 'domain.org');
+
+        let newUrl = getNewUrl(currentUrl, targetEnv);
+        expect(newUrl).toBe('https://domain.org/');
+
+        currentUrl = 'https://domain.org';
+        targetEnv = new Environment('e', 'p', 'http', 'domain.dev');
+        newUrl = getNewUrl(currentUrl, targetEnv);
+        expect(newUrl).toBe('http://domain.dev/');
+    });
+
+    it('should allow port switching', function() {
+        let targetEnv = new Environment('e', 'p', 'http', 'domain.org:8001');
+
+        let newUrl = getNewUrl(currentUrl, targetEnv);
+        expect(newUrl).toBe('http://domain.org:8001/');
+
+        currentUrl = 'http://domain.test:8000';
+        targetEnv.pattern = 'domain.test:9000';
+
+        newUrl = getNewUrl(currentUrl, targetEnv);
+        expect(newUrl).toBe('http://domain.test:9000/');
+    });
+
+    it('should keep the current page on the new url', function() {
+        let currentUrl = 'http://domain.test/some/page.html';
+        let targetEnv = new Environment('e', 'p', 'http', 'domain.org');
+        let newUrl = getNewUrl(currentUrl, targetEnv);
+
+        expect(newUrl).toBe('http://domain.org/some/page.html');
+    });
+
+    it('should keep the search parameters on the new url', function() {
+        let currentUrl = 'http://domain.test/?a=1&_b=2';
+        let targetEnv = new Environment('e', 'p', 'http', 'domain.org');
+        let newUrl = getNewUrl(currentUrl, targetEnv);
+
+        expect(newUrl).toBe('http://domain.org/?a=1&_b=2');
+
+        currentUrl = 'http://domain.test/page.html?query=alphabet&b=1';
+        targetEnv.pattern = 'domain.org:9000';
+        newUrl = getNewUrl(currentUrl, targetEnv);
+
+        expect(newUrl).toBe('http://domain.org:9000/page.html?query=alphabet&b=1');
     });
 });
