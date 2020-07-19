@@ -1,6 +1,5 @@
 import * as types from './mutation-types';
 import { ProjectFactory } from '../models/ProjectFactory';
-import { uuidv4 } from '../helpers/uuid';
 import { EnvironmentFactory } from '../models/EnvironmentFactory';
 import { SETTINGS } from '../constants';
 
@@ -26,6 +25,30 @@ export const updateEnvironment = ({ commit }, environment) => {
 
 export const updateProject = ({ commit }, projectPayload) => {
     commit(types.UPDATE_PROJECT, projectPayload);
+};
+
+export const showImportDialog = ({ commit }) => {
+    commit(types.SHOW_IMPORT_DIALOG);
+};
+
+export const hideImportDialog = ({ commit }) => {
+    commit(types.HIDE_IMPORT_DIALOG);
+};
+
+export const importSettings = ({ commit }, jsonString) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const projects = ProjectFactory.createListFromSettingsString(jsonString);
+            if (projects.length) {
+                commit(types.UPDATE_PROJECTS, projects);
+                return resolve(true);
+            }
+
+            return resolve(false);
+        } catch (e) {
+            return reject(e);
+        }
+    });
 };
 
 export const initFromSettings = ({ commit }) => {

@@ -18,6 +18,7 @@ export default new Vuex.Store({
     state: {
         projects: [],
         isSaving: false,
+        importDialogOpen: false,
     },
     getters,
     mutations,

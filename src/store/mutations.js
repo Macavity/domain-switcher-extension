@@ -10,6 +10,14 @@ export default {
         state.isSaving = false;
     },
 
+    [types.SHOW_IMPORT_DIALOG](state) {
+        state.importDialogOpen = true;
+    },
+
+    [types.HIDE_IMPORT_DIALOG](state) {
+        state.importDialogOpen = false;
+    },
+
     [types.UPDATE_PROJECTS](state, payload) {
         state.projects = [...payload];
     },
