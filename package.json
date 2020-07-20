@@ -1,6 +1,7 @@
 {
     "name": "domain-switcher-extension",
-    "description": "A Vue.js web extension",
+    "description": "Easily switch domains between development, staging, production or other environments of projects.",
+    "version": "1.0.0",
     "author": "Alexander Pape",
     "engines": {
         "node": ">=10"
