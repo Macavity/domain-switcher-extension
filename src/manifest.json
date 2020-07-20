@@ -1,11 +1,11 @@
 {
     "name": "domain-switcher-extension",
-    "description": "A Vue.js web extension",
-    "version": "0.2.0",
+    "description": "Easily switch domains between development, staging, production or other environments of projects.",
+    "version": "__REPLACED_ON_BUILD__",
     "manifest_version": 2,
     "icons": {
-        "48": "icons/icon_48.png",
-        "128": "icons/icon_128.png"
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png"
     },
     "page_action": {
         "default_icon": {
