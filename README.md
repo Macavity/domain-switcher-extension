@@ -1,6 +1,6 @@
 # Domain Switcher (Chrome Extension)
 
-[![Build Status](https://travis-ci.org/Macavity/domain-switcher-extension.svg?branch=master)](https://travis-ci.org/Macavity/domain-switcher-extension)
+![CI](https://github.com/Macavity/domain-switcher-extension/workflows/CI/badge.svg)
 
 Inspired by https://github.com/stevehanson/domain-switcher-chrome but decided to do a complete do-over with Vue/Webpack/ESLint.
 
