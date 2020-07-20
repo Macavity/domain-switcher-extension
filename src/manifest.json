@@ -1,5 +1,5 @@
 {
-    "name": "domain-switcher-extension",
+    "name": "Domain Switcher",
     "description": "Easily switch domains between development, staging, production or other environments of projects.",
     "version": "__REPLACED_ON_BUILD__",
     "manifest_version": 2,
