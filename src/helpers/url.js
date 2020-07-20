@@ -36,6 +36,10 @@ export function checkForRegisteredUrl(tabId, changeInfo, tab) {
             tabId: tab.id,
             popup: PAGE_POPUP,
         });
+
+        // TODO Add dynamic Badge showing current Environment
+        // global.browser.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
+        // global.browser.browserAction.setBadgeText({text:"?"});
     }
 }
 

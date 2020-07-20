@@ -87,3 +87,16 @@ export function switchDomain(urlString, targetEnv, openInNewTab) {
         console.groupEnd();
     });
 }
+
+/**
+ * @param {object} settings
+ */
+export function exportSettings(settings) {
+    const result = JSON.stringify(settings);
+    const url = 'data:application/json;base64,' + btoa(result);
+
+    return global.browser.downloads.download({
+        url: url,
+        filename: 'domain-switcher-settings.json',
+    });
+}

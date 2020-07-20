@@ -7,11 +7,10 @@
             <el-main>
                 <h3>Projects</h3>
 
+                <ImportDialog />
+
                 <el-row>
-                    <el-col :span="24">
-                        <el-button @click="addProject" type="primary">Add Project</el-button>
-                        <br />
-                    </el-col>
+                    <Actions />
                 </el-row>
                 <el-row>
                     <el-col :span="24">
@@ -25,7 +24,7 @@
             </el-main>
 
             <el-footer>
-                <el-button type="primary" @click="save" :loading="isSaving">Save settings</el-button>
+                <Actions />
             </el-footer>
         </el-container>
     </div>
@@ -34,10 +33,13 @@
 <script>
 import { mapGetters } from 'vuex';
 import ProjectRow from './ProjectRow';
+import { exportSettings } from '../helpers/browser';
+import Actions from './Actions';
+import ImportDialog from './ImportDialog';
 
 export default {
     name: 'DomainSwitcherOptions',
-    components: { ProjectRow },
+    components: { ImportDialog, Actions, ProjectRow },
     data() {
         return {
             showSaveAlert: false,
@@ -55,21 +57,10 @@ export default {
     },
 
     methods: {
-        addProject() {
-            this.$store.dispatch('addProject');
-        },
-
         save() {
             this.$store.dispatch('saveSettings').then(() => {
                 this.$message.success('Successfully saved.');
             });
-        },
-
-        handleEdit(index, row) {
-            console.log(index, row);
-        },
-        handleDelete(index, row) {
-            console.log(index, row);
         },
     },
 };

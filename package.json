@@ -1,6 +1,5 @@
 {
     "name": "domain-switcher-extension",
-    "version": "1.0.0",
     "description": "A Vue.js web extension",
     "author": "Alexander Pape",
     "engines": {
@@ -38,6 +37,7 @@
         "babel-eslint": "^10.0.3",
         "babel-jest": "^26.1.0",
         "babel-loader": "^8.0.2",
+        "babel-plugin-component": "^1.1.1",
         "copy-webpack-plugin": "^5.1.1",
         "core-js": "^3.0.1",
         "cross-env": "^5.2.0",
