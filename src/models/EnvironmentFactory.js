@@ -7,17 +7,13 @@ export class EnvironmentFactory {
     }
 
     static createFromSettingsObject(object) {
-        const protocol = object.protocol || 'https';
-        const id = object.id || uuidv4();
-        const projectId = object.projectId;
-        const pattern = object.pattern;
-        const label = object.label;
-        const patternTarget = object.patternTarget;
+        object.protocol = object.protocol || 'https';
+        object.id = object.id || uuidv4();
 
-        return new Environment(id, projectId, protocol, label, pattern, patternTarget);
+        return EnvironmentFactory.clone(object);
     }
 
     static clone(env) {
-        return new Environment(env.id, env.projectId, env.protocol, env.label, env.pattern, env.patternTarget);
+        return new Environment(env.id, env.projectId, env.protocol, env.label, env.pattern, env.patternTarget, env.badgeColor, env.badgeText);
     }
 }

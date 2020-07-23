@@ -17,13 +17,19 @@ export class Project {
     /**
      * @var {boolean}
      */
-    isRegExp;
+    useRegExp;
 
-    constructor(id, name, environments = [], isRegExp = false) {
+    /**
+     * @var {boolean}
+     */
+    useBadges;
+
+    constructor(id, name, environments = [], useRegExp = false, useBadges = false) {
         this.id = id;
         this.name = name;
         this.environments = environments;
-        this.isRegExp = isRegExp;
+        this.useRegExp = useRegExp;
+        this.useBadges = useBadges;
     }
 
     addEnvironment(env) {

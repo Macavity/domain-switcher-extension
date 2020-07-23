@@ -40,7 +40,7 @@ export class TargetEnvironmentFactory {
         let collection = [];
 
         for (const targetEnv of project.environments) {
-            if (project.isRegExp) {
+            if (project.useRegExp) {
                 collection.push(TargetEnvironmentFactory.createForRegExp(project, currentUrl, currentEnv, targetEnv));
             } else {
                 collection.push(TargetEnvironmentFactory.create(currentUrl, targetEnv));

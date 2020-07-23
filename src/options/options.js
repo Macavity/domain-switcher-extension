@@ -4,6 +4,7 @@ import {
     Button,
     Card,
     Col,
+    ColorPicker,
     Container,
     Dialog,
     Footer,
@@ -22,11 +23,15 @@ import {
     Table,
     TableColumn,
 } from 'element-ui';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from '../store';
 import DomainSwitcherOptions from './DomainSwitcherOptions';
 
 global.browser = require('webextension-polyfill');
+
+locale.use(lang);
 
 Vue.use(Alert);
 Vue.use(Button);
@@ -37,6 +42,7 @@ Vue.use(Option);
 Vue.use(Row);
 Vue.use(Card);
 Vue.use(Col);
+Vue.use(ColorPicker);
 Vue.use(Dialog);
 Vue.use(Footer);
 Vue.use(Form);

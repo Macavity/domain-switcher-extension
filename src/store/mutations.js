@@ -74,7 +74,7 @@ export default {
                     return item;
                 });
 
-                return ProjectFactory.createFromProperties(p.id, p.name, newEnvironments);
+                return ProjectFactory.createFromProperties(p.id, p.name, newEnvironments, p.useRegExp, p.useBadges);
             }
 
             return p;

@@ -12,11 +12,22 @@
                 </el-col>
             </el-row>
         </div>
-        <el-switch v-model="project.isRegExp" @change="save" active-color="#13ce66" active-text="use Regular Expressions"></el-switch>
+        <el-switch v-model="project.useRegExp" @change="save" active-color="#13ce66" active-text="use Regular Expressions"></el-switch>
+        <el-switch v-model="project.useBadges" @change="save" active-color="#13ce66" active-text="use Badges"></el-switch>
         <el-table :data="project.environments" empty-text="No Environments added yet.">
             <el-table-column prop="position" label="#" width="50">
                 <template slot-scope="scope">
                     {{ scope.$index + 1 }}
+                </template>
+            </el-table-column>
+            <el-table-column v-if="project.useBadges" prop="badgeColor" label="" width="50">
+                <template slot-scope="scope">
+                    <el-color-picker v-model="scope.row.badgeColor" size="medium" @change="updateEnv(scope.row)"></el-color-picker>
+                </template>
+            </el-table-column>
+            <el-table-column v-if="project.useBadges" prop="badgeText" label="Badge" width="120">
+                <template slot-scope="scope">
+                    <el-input v-model="scope.row.badgeText" @change="updateEnv(scope.row)" maxlength="3" show-word-limit class="options__badge-text" clearable></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="label" label="Label" width="300">
@@ -34,7 +45,7 @@
                     </el-input>
                 </template>
             </el-table-column>
-            <el-table-column v-if="project.isRegExp" prop="patternTarget" label="Target URL" width="auto">
+            <el-table-column v-if="project.useRegExp" prop="patternTarget" label="Target URL" width="auto">
                 <template slot-scope="scope">
                     <el-input placeholder="$1.org" v-model="scope.row.patternTarget" @change="updateEnv(scope.row)" class="input-with-select">
                         <template slot="prepend">{{ scope.row.protocol }}://</template>
@@ -120,6 +131,10 @@ export default {
 
 .el-select .el-input {
     width: 92px;
+}
+
+.options__badge-text.el-input {
+    width: 100px;
 }
 
 .project {
