@@ -4,7 +4,7 @@ import { EnvironmentFactory } from './EnvironmentFactory';
 
 export class ProjectFactory {
     static createEmpty() {
-        return new Project(uuidv4(), 'New Project', []);
+        return new Project(uuidv4(), 'New Project');
     }
 
     static createListFromSettingsString(settings) {
@@ -33,7 +33,8 @@ export class ProjectFactory {
     static createFromSettingsObject(projectObject) {
         const name = projectObject.name;
         const id = projectObject.id || uuidv4();
-        const isRegExp = projectObject.isRegExp;
+        const useRegExp = projectObject.useRegExp;
+        const useBadges = projectObject.useBadges;
 
         if (!Array.isArray(projectObject.environments)) {
             throw new Error('environments is expected to be an array.');
@@ -50,10 +51,10 @@ export class ProjectFactory {
             environments.push(EnvironmentFactory.createFromSettingsObject(env));
         }
 
-        return new Project(id, name, environments, isRegExp);
+        return new Project(id, name, environments, useRegExp, useBadges);
     }
 
-    static createFromProperties(id, name, environments = [], isRegExp = false) {
-        return new Project(id, name, environments, isRegExp);
+    static createFromProperties(id, name, environments = [], useRegExp = false, useBadges = false) {
+        return new Project(id, name, environments, useRegExp, useBadges);
     }
 }

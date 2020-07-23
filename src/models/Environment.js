@@ -38,12 +38,24 @@ export class Environment {
      */
     targetURL = '';
 
-    constructor(id, projectId, protocol = 'https', label = '', pattern = '', patternTarget = '') {
+    /**
+     * @type {string|null}
+     */
+    badgeColor;
+
+    /**
+     * @type {string}
+     */
+    badgeText;
+
+    constructor(id, projectId, protocol = 'https', label = '', pattern = '', patternTarget = '', badgeColor = null, badgeText = '') {
         this.id = id;
         this.projectId = projectId;
         this.protocol = protocol;
         this.label = label;
         this.pattern = pattern;
         this.patternTarget = patternTarget;
+        this.badgeColor = badgeColor;
+        this.badgeText = badgeText;
     }
 }

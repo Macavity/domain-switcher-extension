@@ -12,7 +12,7 @@ export class TargetEnvironmentFactory {
     static create(currentUrl, targetEnv) {
         const targetUrl = getNewUrl(currentUrl, targetEnv);
 
-        return new TargetEnvironment(env);
+        return new TargetEnvironment(targetEnv, targetUrl);
     }
 
     /**
@@ -40,7 +40,7 @@ export class TargetEnvironmentFactory {
         let collection = [];
 
         for (const targetEnv of project.environments) {
-            if (project.isRegExp) {
+            if (project.useRegExp) {
                 collection.push(TargetEnvironmentFactory.createForRegExp(project, currentUrl, currentEnv, targetEnv));
             } else {
                 collection.push(TargetEnvironmentFactory.create(currentUrl, targetEnv));
