@@ -12,7 +12,7 @@ export class TargetEnvironmentFactory {
     static create(currentUrl, targetEnv) {
         const targetUrl = getNewUrl(currentUrl, targetEnv);
 
-        return new TargetEnvironment(env);
+        return new TargetEnvironment(targetEnv, targetUrl);
     }
 
     /**

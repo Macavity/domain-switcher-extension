@@ -27,7 +27,7 @@
             </el-table-column>
             <el-table-column v-if="project.useBadges" prop="badgeText" label="Badge" width="120">
                 <template slot-scope="scope">
-                    <el-input v-model="scope.row.badgeText" @change="updateEnv(scope.row)" maxlength="3" show-word-limit class="options__badge-text" clearable></el-input>
+                    <el-input v-model="scope.row.badgeText" @change="updateEnv(scope.row)" maxlength="4" show-word-limit class="options__badge-text" clearable></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="label" label="Label" width="300">

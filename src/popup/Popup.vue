@@ -1,41 +1,44 @@
 <template>
-    <div class="popup">
-        <el-row>
-            <el-col :span="24">
-                <h2>Switch Domain</h2>
-                <el-menu :default-active="activeEnvId">
-                    <el-menu-item v-for="targetEnv in targetEnvironments" :key="targetEnv.id" :index="targetEnv.id" @click="selectEnv(targetEnv, $event)">
-                        {{ targetEnv.label }}
-                    </el-menu-item>
-                </el-menu>
-            </el-col>
-        </el-row>
-        <el-footer>
-            <el-button type="primary" size="small" icon="el-icon-setting" plain @click="loadSettings">
-                Change Settings
-            </el-button>
-        </el-footer>
-    </div>
+  <div class="popup">
+    <el-row>
+      <el-col :span="24">
+        <h2>Switch Domain</h2>
+        <div v-if="!activeEnvId" class="tip">Not a registered URL.</div>
+        <el-menu :default-active="activeEnvId">
+          <el-menu-item v-for="targetEnv in targetEnvironments" :key="targetEnv.id" :index="targetEnv.id"
+                        @click="selectEnv(targetEnv, $event)">
+            {{ targetEnv.label }}
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+    </el-row>
+    <el-footer>
+      <el-button type="primary" size="small" icon="el-icon-setting" plain @click="loadSettings">
+        Change Settings
+      </el-button>
+    </el-footer>
+  </div>
 </template>
 
 <script>
-import { goToOptionsPage, sendMessageSwitchDomain } from '../helpers/browser';
-import { getMatchingEnvironmentForUrl } from '../helpers/url';
-import { mapGetters } from 'vuex';
-import { TargetEnvironmentFactory } from '../models/TargetEnvironmentFactory';
+    import { goToOptionsPage, sendMessageSwitchDomain } from '../helpers/browser';
+    import { getMatchingEnvironmentForUrl } from '../helpers/url';
+    import { mapGetters } from 'vuex';
+    import { TargetEnvironmentFactory } from '../models/TargetEnvironmentFactory';
 
-export default {
-    name: 'Popup',
-    props: {
-        currentTabURL: {
-            type: String,
-            required: true,
+    export default {
+        name: 'Popup',
+        props: {
+            currentTabURL: {
+                type: String,
+                required: true,
+            },
         },
     },
 
-    mounted() {
-        console.log('Popup.mounted', this.currentTabURL, this.projects);
-        this.updateEnvironments();
+        mounted() {
+            console.log('Popup.mounted', this.currentTabURL, this.projects);
+            this.updateEnvironments();
 
         if (typeof process.env.BUILD_VERSION !== 'undefined') {
             console.log('Popup - Version ' + process.env.BUILD_VERSION);
@@ -113,24 +116,32 @@ export default {
 </script>
 
 <style lang="scss">
-.popup {
+  .popup {
     .el-row {
-        margin-bottom: 10px;
+      margin-bottom: 10px;
     }
 
     .el-menu {
-        border: 0;
+      border: 0;
     }
 
     .el-menu-item {
-        &:hover {
-            background-color: #ebeef5;
-        }
+      &:hover {
+        background-color: #ebeef5;
+      }
 
-        &.is-active {
-            font-weight: bold;
-            color: rgb(100, 149, 237);
-        }
+      &.is-active {
+        font-weight: bold;
+        color: rgb(100, 149, 237);
+      }
     }
-}
+  }
+
+  .tip {
+    padding: 8px 16px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+    margin: 20px 0;
+  }
 </style>
