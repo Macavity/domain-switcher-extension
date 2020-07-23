@@ -53,7 +53,7 @@ export function getMatchingEnvironmentForUrl(projects, currentUrl) {
 
     for (const project of projects) {
         for (const env of project.environments) {
-            const matchResult = project.isRegExp ? urlMatchesRegEx(env.pattern, tabURL) : urlMatches(env.pattern, tabURL);
+            const matchResult = project.useRegExp ? urlMatchesRegEx(env.pattern, tabURL) : urlMatches(env.pattern, tabURL);
 
             if (matchResult) {
                 return env;

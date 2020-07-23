@@ -3,6 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <h2>Switch Domain</h2>
+                <div v-if="!activeEnvId" class="tip">Not a registered URL.</div>
                 <el-menu :default-active="activeEnvId">
                     <el-menu-item v-for="targetEnv in targetEnvironments" :key="targetEnv.id" :index="targetEnv.id" @click="selectEnv(targetEnv, $event)">
                         {{ targetEnv.label }}
@@ -132,5 +133,13 @@ export default {
             color: rgb(100, 149, 237);
         }
     }
+}
+
+.tip {
+    padding: 8px 16px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+    margin: 20px 0;
 }
 </style>

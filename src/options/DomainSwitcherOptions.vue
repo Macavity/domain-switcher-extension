@@ -37,7 +37,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import ProjectRow from './ProjectRow';
-import { exportSettings } from '../helpers/browser';
 import Actions from './Actions';
 import ImportDialog from './ImportDialog';
 
