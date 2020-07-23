@@ -18,6 +18,7 @@ import {
     Option,
     Row,
     Select,
+    Switch,
     Table,
     TableColumn,
 } from 'element-ui';
@@ -42,6 +43,7 @@ Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Input);
 Vue.use(Select);
+Vue.use(Switch);
 Vue.use(Table);
 Vue.use(TableColumn);
 

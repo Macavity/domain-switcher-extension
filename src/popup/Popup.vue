@@ -4,8 +4,8 @@
             <el-col :span="24">
                 <h2>Switch Domain</h2>
                 <el-menu :default-active="activeEnvId">
-                    <el-menu-item v-for="env in environments" :key="env.id" :index="env.id" @click="selectEnv(env, $event)">
-                        {{ env.label }}
+                    <el-menu-item v-for="targetEnv in targetEnvironments" :key="targetEnv.id" :index="targetEnv.id" @click="selectEnv(targetEnv, $event)">
+                        {{ targetEnv.label }}
                     </el-menu-item>
                 </el-menu>
             </el-col>
@@ -22,6 +22,7 @@
 import { goToOptionsPage, sendMessageSwitchDomain } from '../helpers/browser';
 import { getMatchingEnvironmentForUrl } from '../helpers/url';
 import { mapGetters } from 'vuex';
+import { TargetEnvironmentFactory } from '../models/TargetEnvironmentFactory';
 
 export default {
     name: 'Popup',
@@ -43,7 +44,7 @@ export default {
 
     data() {
         return {
-            environments: [],
+            targetEnvironments: [],
             activeEnvId: null,
         };
     },
@@ -77,32 +78,35 @@ export default {
         updateEnvironments() {
             console.group('updateEnvironments');
             if (!this.projects || !this.currentTabURL) {
-                console.debug('-> skipped', this.projects, this.currentTabURL);
+                //console.debug('-> skipped', this.projects, this.currentTabURL);
                 return;
             }
 
-            const environment = getMatchingEnvironmentForUrl(this.projects, this.currentTabURL);
-            console.debug('getMatchingEnvironmentForUrl', environment);
-            this.activeEnvId = environment.id;
+            const currentEnv = getMatchingEnvironmentForUrl(this.projects, this.currentTabURL);
+            //console.debug('getMatchingEnvironmentForUrl', environment);
+            this.activeEnvId = currentEnv.id;
 
-            const filteredProjects = this.$store.getters.projectById(environment.projectId);
+            const filteredProjects = this.$store.getters.projectById(currentEnv.projectId);
             const project = filteredProjects[0] || null;
-            console.debug('filteredProjects: ', filteredProjects);
-            console.debug('=> project: ', project);
+            //console.debug('filteredProjects: ', filteredProjects);
+            //console.debug('=> project: ', project);
 
-            this.environments = project.environments;
-            console.debug('Updated Environments', this.environments);
+            this.targetEnvironments = TargetEnvironmentFactory.createCollection(project, this.currentTabURL, currentEnv);
+            console.debug('Updated Environments', this.targetEnvironments);
             console.groupEnd();
         },
 
-        selectEnv(env) {
-            console.log('selectEnv', env);
-            const url = new URL(this.currentTabURL);
+        /**
+         * @param {TargetEnvironment} targetEnv
+         */
+        selectEnv(targetEnv) {
+            console.log('selectEnv', targetEnv);
+            const currentUrl = this.currentTabURL;
 
             // TODO
             // const openInNewTab = ($event.modifier.altKey || $event.modifier.ctrlKey || $event.modifier.metaKey);
 
-            sendMessageSwitchDomain(url, env);
+            sendMessageSwitchDomain(currentUrl, targetEnv.targetUrl);
         },
     },
 };

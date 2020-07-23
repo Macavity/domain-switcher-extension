@@ -53,9 +53,9 @@ export function getMatchingEnvironmentForUrl(projects, currentUrl) {
 
     for (const project of projects) {
         for (const env of project.environments) {
-            const urlPattern = addProtocol(env.pattern);
+            const matchResult = project.isRegExp ? urlMatchesRegEx(env.pattern, tabURL) : urlMatches(env.pattern, tabURL);
 
-            if (urlMatches(urlPattern, tabURL)) {
+            if (matchResult) {
                 return env;
             }
         }
@@ -70,7 +70,7 @@ export function getMatchingEnvironmentForUrl(projects, currentUrl) {
  * @return {boolean}
  */
 export function urlMatches(rawPattern, currentUrl) {
-    //console.debug('Checking host ' + currentUrl.host + ' against pattern ' + rawPattern);
+    //console.debug('Checking currentURL.host "' + currentUrl.host + '" against pattern "' + rawPattern + '"');
 
     if (!currentUrl.host) {
         return false; // if blank url
@@ -79,10 +79,11 @@ export function urlMatches(rawPattern, currentUrl) {
     let pattern = rawPattern;
 
     if (rawPattern.indexOf('://') === -1) {
-        pattern = 'https://' + pattern;
+        pattern = addProtocol(pattern);
     }
-
     const patternUrl = new URL(pattern);
+
+    //console.log(patternUrl.host);
 
     let match = currentUrl.host.indexOf(patternUrl.host) === 0;
     //console.debug('1st', match);
@@ -97,9 +98,33 @@ export function urlMatches(rawPattern, currentUrl) {
     return match;
 }
 
+/**
+ * @param {string} pattern
+ * @param {URL} currentUrl
+ * @return {boolean}
+ */
+export function urlMatchesRegEx(pattern, currentUrl) {
+    //console.debug('Checking currentURL.host "' + currentUrl.host + '" against regex pattern "' + pattern + '"');
+    if (typeof pattern !== 'string') {
+        throw new Error('Pattern needs to be a string.');
+    }
+
+    if (!currentUrl.host) {
+        // console.error('URL has no host')
+        return false; // if blank url
+    }
+
+    const regExp = new RegExp(pattern);
+
+    const test = regExp.test(currentUrl.host);
+    // console.debug('test',test);
+
+    return test;
+}
+
 export function addProtocol(url) {
     if (url.indexOf('://') === -1) {
-        return '//' + url;
+        return 'https://' + url;
     } else {
         return url;
     }
@@ -114,6 +139,29 @@ export function getNewUrl(urlString, targetEnv) {
     const targetEnvUrl = targetEnv.protocol + '://' + targetEnv.pattern;
     const targetUrl = new URL(targetEnvUrl);
     const currentUrl = new URL(urlString);
+
+    targetUrl.pathname = currentUrl.pathname;
+    targetUrl.search = currentUrl.search;
+
+    return targetUrl.toString();
+}
+
+/**
+ * @param {string} currentUrlString
+ * @param {Environment} targetEnv
+ * @param {Environment|null} currentEnv
+ * @return {string}
+ */
+export function getNewUrlForRegExp(currentUrlString, targetEnv, currentEnv = null) {
+    const currentUrl = new URL(currentUrlString);
+    const targetHost = currentUrl.host.replace(new RegExp(currentEnv.pattern), targetEnv.patternTarget);
+    // console.log('currentUrl.host', currentUrl.host);
+    // console.log('currentEnv.pattern', currentEnv.pattern);
+    // console.log('targetEnv.patternTarget', targetEnv.patternTarget);
+    // console.log('=> targetHost', targetHost);
+
+    const targetEnvUrl = targetEnv.protocol + '://' + targetHost;
+    const targetUrl = new URL(targetEnvUrl);
 
     targetUrl.pathname = currentUrl.pathname;
     targetUrl.search = currentUrl.search;

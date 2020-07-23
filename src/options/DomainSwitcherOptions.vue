@@ -9,6 +9,10 @@
 
                 <ImportDialog />
 
+                <div class="tip">
+                    You can make a Project use Regular Expressions, be aware that then all Environments of this project need to have the same amount of capturing groups.
+                </div>
+
                 <el-row>
                     <Actions />
                 </el-row>
@@ -77,5 +81,13 @@ p {
     &:last-child {
         margin-bottom: 0;
     }
+}
+
+.tip {
+    padding: 8px 16px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+    margin: 20px 0;
 }
 </style>

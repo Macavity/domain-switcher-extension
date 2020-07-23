@@ -9,6 +9,7 @@
     "scripts": {
         "lint": "eslint --ext .js,.vue src",
         "test": "jest",
+        "test:watch": "jest --watch",
         "prettier": "prettier \"src/**/*.{js,vue}\"",
         "prettier:write": "npm run prettier -- --write",
         "build": "cross-env NODE_ENV=production webpack --hide-modules",

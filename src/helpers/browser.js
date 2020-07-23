@@ -25,15 +25,15 @@ export function goToOptionsPage() {
 /**
  * Sent from the Popup to the background listener
  *
- * @param {URL} currentUrl
- * @param {Environment} targetEnv
+ * @param {string} currentUrl
+ * @param {string} targetUrl
  * @param {boolean} openInNewTab
  */
-export function sendMessageSwitchDomain(currentUrl, targetEnv, openInNewTab = false) {
+export function sendMessageSwitchDomain(currentUrl, targetUrl, openInNewTab = false) {
     global.browser.runtime.sendMessage({
         type: MESSAGE_TYPE_SWITCH_DOMAIN,
         currentUrl,
-        targetEnv,
+        targetUrl,
         openInNewTab,
     });
 }
@@ -48,39 +48,33 @@ export function onBackgroundMessage(messageEvent) {
     }
 
     if (messageEvent.type === MESSAGE_TYPE_SWITCH_DOMAIN) {
-        const { currentUrl, targetEnv, openInNewTab } = messageEvent;
-        switchDomain(currentUrl, targetEnv, openInNewTab);
+        const { currentUrl, targetUrl, openInNewTab } = messageEvent;
+        switchDomain(currentUrl, targetUrl, openInNewTab);
     }
 }
 
 /**
- * @param {string} urlString
- * @param {object} targetEnv
+ * @param {string} currentUrl
+ * @param {string} targetUrl
  * @param {boolean} openInNewTab
  */
-export function switchDomain(urlString, targetEnv, openInNewTab) {
+export function switchDomain(currentUrl, targetUrl, openInNewTab) {
     console.group('switchDomain');
     console.log('browser.switchDomain');
-    console.log(urlString);
-    console.log(targetEnv);
-
-    targetEnv = EnvironmentFactory.createFromSettingsObject(targetEnv);
+    console.log(currentUrl);
+    console.log(targetUrl);
 
     global.browser.tabs.query({ active: true, lastFocusedWindow: true }).then(tabs => {
         const currentTab = tabs[0];
         console.log('currentTab', currentTab);
-        console.log('currentUrl', urlString);
-        console.log('targetEnv', targetEnv);
-
-        const newUrl = getNewUrl(urlString, targetEnv);
 
         if (openInNewTab) {
             global.browser.tabs.create({
-                url: newUrl,
+                url: targetUrl,
             });
         } else {
             global.browser.tabs.update(currentTab.id, {
-                url: newUrl,
+                url: targetUrl,
             });
         }
 

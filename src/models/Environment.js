@@ -1,11 +1,11 @@
 export class Environment {
     /**
-     * @var string
+     * @var {string}
      */
     id;
 
     /**
-     * @var string
+     * @var {string}
      */
     projectId;
 
@@ -15,20 +15,35 @@ export class Environment {
     protocol = 'https';
 
     /**
-     * @var string|null
+     * @var {string|null}
      */
     label = '';
 
     /**
-     * @var string|null
+     * Matching Pattern
+     *
+     * @var {string|null}
      */
     pattern = '';
 
-    constructor(id, projectId, protocol = 'https', pattern = '', label = '') {
+    /**
+     * Target Pattern (RegExp only)
+     *
+     * @var {string|null}
+     */
+    patternTarget = '';
+
+    /**
+     * @type {string}
+     */
+    targetURL = '';
+
+    constructor(id, projectId, protocol = 'https', label = '', pattern = '', patternTarget = '') {
         this.id = id;
         this.projectId = projectId;
         this.protocol = protocol;
-        this.pattern = pattern;
         this.label = label;
+        this.pattern = pattern;
+        this.patternTarget = patternTarget;
     }
 }

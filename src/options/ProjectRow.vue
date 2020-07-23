@@ -12,6 +12,7 @@
                 </el-col>
             </el-row>
         </div>
+        <el-switch v-model="project.isRegExp" @change="save" active-color="#13ce66" active-text="use Regular Expressions"></el-switch>
         <el-table :data="project.environments" empty-text="No Environments added yet.">
             <el-table-column prop="position" label="#" width="50">
                 <template slot-scope="scope">
@@ -23,17 +24,24 @@
                     <el-input v-model="scope.row.label" @change="updateEnv(scope.row)"></el-input>
                 </template>
             </el-table-column>
-            <el-table-column prop="pattern" label="URL" width="auto">
+            <el-table-column prop="pattern" label="URL Pattern" width="auto">
                 <template slot-scope="scope">
                     <el-input placeholder="localhost" v-model="scope.row.pattern" @change="updateEnv(scope.row)" class="input-with-select">
-                        <el-select v-model="scope.row.protocol" @change="updateEnv(scope.row)" slot="prepend" placeholder="Select" default-first-option>
+                        <el-select v-model="scope.row.protocol" @change="updateEnv(scope.row)" slot="prepend" placeholder="Select">
                             <el-option label="https://" value="https"></el-option>
                             <el-option label="http://" value="http"></el-option>
                         </el-select>
                     </el-input>
                 </template>
             </el-table-column>
-            <el-table-column label="Operations">
+            <el-table-column v-if="project.isRegExp" prop="patternTarget" label="Target URL" width="auto">
+                <template slot-scope="scope">
+                    <el-input placeholder="$1.org" v-model="scope.row.patternTarget" @change="updateEnv(scope.row)" class="input-with-select">
+                        <template slot="prepend">{{ scope.row.protocol }}://</template>
+                    </el-input>
+                </template>
+            </el-table-column>
+            <el-table-column label="Operations" width="120">
                 <template slot-scope="scope">
                     <el-button size="mini" type="danger" @click="deleteEnvironment(scope.$index, scope.row)">Delete</el-button>
                 </template>
