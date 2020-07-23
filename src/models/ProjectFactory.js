@@ -31,10 +31,9 @@ export class ProjectFactory {
     }
 
     static createFromSettingsObject(projectObject) {
-        const environments = [];
-
-        projectObject.name = projectObject.name || '';
-        projectObject.environments = projectObject.environments || [];
+        const name = projectObject.name;
+        const id = projectObject.id || uuidv4();
+        const isRegExp = projectObject.isRegExp;
 
         if (!Array.isArray(projectObject.environments)) {
             throw new Error('environments is expected to be an array.');
@@ -45,19 +44,16 @@ export class ProjectFactory {
             return null;
         }
 
-        projectObject.id = projectObject.id || uuidv4();
+        const environments = [];
         for (const env of projectObject.environments) {
-            env.projectId = projectObject.id;
+            env.projectId = id;
             environments.push(EnvironmentFactory.createFromSettingsObject(env));
         }
 
-        const name = projectObject.name;
-        const id = projectObject.id;
-
-        return new Project(id, name, environments);
+        return new Project(id, name, environments, isRegExp);
     }
 
-    static createFromProperties(id, name, environments = []) {
-        return new Project(id, name, environments);
+    static createFromProperties(id, name, environments = [], isRegExp = false) {
+        return new Project(id, name, environments, isRegExp);
     }
 }

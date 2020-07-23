@@ -1,23 +1,29 @@
 export class Project {
     /**
-     * @var string|null
+     * @var {string|null}
      */
     id;
 
     /**
-     * @var string
+     * @var {string}
      */
     name;
 
     /**
-     * @var Environment[]
+     * @var {Environment[]}
      */
     environments;
 
-    constructor(id, name, environments = []) {
+    /**
+     * @var {boolean}
+     */
+    isRegExp;
+
+    constructor(id, name, environments = [], isRegExp = false) {
         this.id = id;
         this.name = name;
         this.environments = environments;
+        this.isRegExp = isRegExp;
     }
 
     addEnvironment(env) {
