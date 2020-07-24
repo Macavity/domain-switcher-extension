@@ -10,9 +10,13 @@
 
 <script>
 import { exportSettings } from '../helpers/browser';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'Actions',
+    computed: {
+        ...mapGetters(['projects']),
+    },
     methods: {
         addProject() {
             this.$store.dispatch('addProject');
