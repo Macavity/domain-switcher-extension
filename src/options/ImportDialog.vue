@@ -60,18 +60,15 @@ export default {
         },
 
         confirmImport() {
-            console.log('confirmImport');
             this.$refs['form'].validate(valid => {
-                console.log('form validate', valid);
-
                 if (valid) {
                     this.$store
                         .dispatch('importSettings', this.importForm.data)
                         .then(result => {
-                            console.log('result', result);
-                            console.log('result', typeof result);
+                            // console.log('result', result);
                             if (result) {
                                 this.$message.success('Settings imported.');
+                                this.$store.dispatch('saveSettings');
                                 this.closeImportDialog();
                             } else {
                                 this.$message.error('No Settings were imported, because no valid projects were contained in the imported data.');
