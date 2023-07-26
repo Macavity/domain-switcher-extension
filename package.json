@@ -40,7 +40,7 @@
         "babel-jest": "^26.1.0",
         "babel-loader": "^8.0.2",
         "babel-plugin-component": "^1.1.1",
-        "copy-webpack-plugin": "^5.1.1",
+        "copy-webpack-plugin": "^5.1.2",
         "core-js": "^3.0.1",
         "cross-env": "^5.2.0",
         "css-loader": "^3.4.0",
